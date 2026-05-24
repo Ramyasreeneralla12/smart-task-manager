@@ -35,12 +35,14 @@ def create_app():
 
     app.register_blueprint(task)
 
+    # AUTO CREATE DATABASE TABLES
+    with app.app_context():
+        db.create_all()
+
     return app
 
 
 app = create_app()
-
-
 if __name__ == "__main__":
 
     socketio.run(
