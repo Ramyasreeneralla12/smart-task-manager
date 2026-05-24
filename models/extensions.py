@@ -12,5 +12,4 @@ db = SQLAlchemy()
 bcrypt = Bcrypt()
 
 login_manager = LoginManager()
-
-socketio = SocketIO()
+socketio = SocketIO(cors_allowed_origins="*")
