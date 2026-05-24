@@ -6,5 +6,6 @@ Flask-SocketIO
 psycopg2-binary
 pandas
 numpy
-eventlet
 gunicorn
+gevent
+gevent-websocket
