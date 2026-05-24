@@ -9,6 +9,7 @@ class Config:
     )
 
     SQLALCHEMY_DATABASE_URI = os.environ.get(
+        "DATABASE_URL",
         "postgresql://taskdb_zd0i_user:6OsS9VMHOplTdLLlumyDtkPPtE0jOo7k@dpg-d8973uh9rddc73917gp0-a.oregon-postgres.render.com/taskdb_zd0i"
     )
 
