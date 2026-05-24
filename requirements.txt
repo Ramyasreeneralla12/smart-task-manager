@@ -1,0 +1,9 @@
+Flask
+Flask-SQLAlchemy
+Flask-Bcrypt
+Flask-Login
+psycopg2-binary
+pandas
+numpy
+flask-socketio
+eventlet

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Login</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="form-box">
+
+        <h1>Welcome Back</h1>
+
+        <p class="subtitle">
+            Login to continue managing your tasks
+        </p>
+
+        <!-- FLASH MESSAGES -->
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="flash-message {{ category }}">
+
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+        <!-- LOGIN FORM -->
+
+        <form method="POST"
+              class="auth-form">
+
+            <input type="email"
+                   name="email"
+                   placeholder="Enter Email"
+                   required>
+
+            <input type="password"
+                   name="password"
+                   placeholder="Enter Password"
+                   required>
+
+            <button type="submit">
+
+                Login
+
+            </button>
+
+        </form>
+
+        <p class="bottom-text">
+
+            Don't have an account?
+
+            <a href="/register">
+                Register
+            </a>
+
+        </p>
+
+    </div>
+
+</div>
+
+<!-- AUTO REMOVE FLASH MESSAGE -->
+
+<script>
+
+setTimeout(() => {
+
+    const flashMessages =
+        document.querySelectorAll(
+            ".flash-message"
+        );
+
+    flashMessages.forEach(msg => {
+
+        msg.style.display = "none";
+
+    });
+
+}, 3000);
+
+</script>
+
+</body>
+</html>

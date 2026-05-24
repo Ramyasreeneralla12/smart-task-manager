@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="main-dashboard">
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <h2>Smart Tasks</h2>
+
+        <a href="/dashboard">
+            Dashboard
+        </a>
+
+        <a href="/logout">
+            Logout
+        </a>
+
+    </div>
+
+    <!-- CONTENT -->
+
+    <div class="content">
+
+        <h1>Task Dashboard</h1>
+
+        <!-- FLASH -->
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="flash-message {{ category }}">
+
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+        <!-- ANALYTICS -->
+
+        <div class="analytics-container">
+
+            <div class="analytics-card">
+
+                <h2>Total Tasks</h2>
+
+                <p>{{ analytics.total_tasks }}</p>
+
+            </div>
+
+            <div class="analytics-card">
+
+                <h2>Completed</h2>
+
+                <p>{{ analytics.completed_tasks }}</p>
+
+            </div>
+
+            <div class="analytics-card">
+
+                <h2>Pending</h2>
+
+                <p>{{ analytics.pending_tasks }}</p>
+
+            </div>
+
+            <div class="analytics-card">
+
+                <h2>Completion %</h2>
+
+                <p>{{ analytics.completion_percentage }}%</p>
+
+            </div>
+
+        </div>
+
+        <!-- FILTER -->
+
+        <div class="filter-section">
+
+            <form method="GET"
+                  action="/dashboard"
+                  class="filter-form">
+
+                <input type="text"
+                       name="search"
+                       placeholder="Search Tasks">
+
+                <select name="priority">
+
+                    <option value="">
+                        All Priorities
+                    </option>
+
+                    <option value="High">
+                        High
+                    </option>
+
+                    <option value="Medium">
+                        Medium
+                    </option>
+
+                    <option value="Low">
+                        Low
+                    </option>
+
+                </select>
+
+                <select name="status">
+
+                    <option value="">
+                        All Status
+                    </option>
+
+                    <option value="Pending">
+                        Pending
+                    </option>
+
+                    <option value="Completed">
+                        Completed
+                    </option>
+
+                </select>
+
+                <button type="submit">
+
+                    Filter
+
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- TASK FORM -->
+
+        <div class="task-form">
+
+            <form method="POST"
+                  action="/add-task">
+
+                <input type="text"
+                       name="title"
+                       placeholder="Task Title"
+                       required>
+
+                <textarea name="description"
+                          placeholder="Task Description"
+                          required></textarea>
+
+                <select name="priority">
+
+                    <option value="High">
+                        High Priority
+                    </option>
+
+                    <option value="Medium">
+                        Medium Priority
+                    </option>
+
+                    <option value="Low">
+                        Low Priority
+                    </option>
+
+                </select>
+
+                <input type="date"
+                       name="deadline"
+                       id="deadline"
+                       required>
+
+                <button type="submit">
+
+                    Add Task
+
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- EXPORT -->
+
+        <div class="export-btn-section">
+
+            <a href="/export-csv">
+
+                <button class="export-btn">
+
+                    Export CSV
+
+                </button>
+
+            </a>
+
+        </div>
+
+        <!-- TASKS -->
+
+        <div class="task-container">
+
+            {% if tasks %}
+
+                {% for task in tasks %}
+
+                <div class="task-card">
+
+                    <h2>{{ task.title }}</h2>
+
+                    <p>{{ task.description }}</p>
+
+                    <span class="priority {{ task.priority }}">
+
+                        {{ task.priority }}
+
+                    </span>
+
+                    <span class="status">
+
+                        {{ task.status }}
+
+                    </span>
+
+                    <p class="deadline">
+
+                        Deadline:
+                        {{ task.deadline }}
+
+                    </p>
+
+                    <p class="created-date">
+
+                        Created:
+                        {{ task.created_date.strftime('%d-%m-%Y') }}
+
+                    </p>
+
+                    <!-- BUTTONS -->
+
+                    <div class="task-buttons">
+
+                        <a href="/update-task/{{ task.id }}">
+
+                            <button class="complete-btn">
+
+                                {% if task.status == "Pending" %}
+
+                                    Complete
+
+                                {% else %}
+
+                                    Undo
+
+                                {% endif %}
+
+                            </button>
+
+                        </a>
+
+                        <a href="/edit-task/{{ task.id }}">
+
+                            <button class="edit-btn">
+
+                                Edit
+
+                            </button>
+
+                        </a>
+
+                        <a href="/delete-task/{{ task.id }}"
+                           onclick="return confirm('Delete this task?')">
+
+                            <button class="delete-btn">
+
+                                Delete
+
+                            </button>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="empty-state">
+
+                    <h2>No Tasks Found</h2>
+
+                    <p>
+
+                        Start by adding your first task
+
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+        <!-- HISTORY -->
+
+        <div class="history-section">
+
+            <h1>Task History</h1>
+
+            {% if history %}
+
+                {% for item in history %}
+
+                <div class="history-card">
+
+                    <div>
+
+                        <h3>
+
+                            {{ item.task_title }}
+
+                        </h3>
+
+                        <p>
+
+                            {{ item.action }}
+
+                        </p>
+
+                    </div>
+
+                    <a href="/delete-history/{{ item.id }}">
+
+                        <button class="small-delete-btn">
+
+                            X
+
+                        </button>
+
+                    </a>
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p>
+
+                    No Task History Available
+
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- NOTIFICATION -->
+
+<div id="notification-box"></div>
+
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+
+</html>
