@@ -1,7 +1,6 @@
 from flask import Flask
 
 from config import Config
-
 from models.extensions import db
 from models.extensions import bcrypt
 from models.extensions import login_manager
