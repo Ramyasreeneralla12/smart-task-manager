@@ -1,9 +1,10 @@
 Flask
 Flask-SQLAlchemy
-Flask-Bcrypt
 Flask-Login
+Flask-Bcrypt
+Flask-SocketIO
 psycopg2-binary
 pandas
 numpy
-flask-socketio
 eventlet
+gunicorn
